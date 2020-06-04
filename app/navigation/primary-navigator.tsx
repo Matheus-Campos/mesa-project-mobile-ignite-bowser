@@ -7,7 +7,8 @@
 import React from "react"
 
 import { createNativeStackNavigator } from "react-native-screens/native-stack"
-import { SignInScreen, SignUpScreen } from "../screens"
+import { SignInScreen, SignUpScreen, MainScreen, ProfileScreen, LocationScreen } from "../screens"
+import { useStores } from "../models"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -26,21 +27,25 @@ export type PrimaryParamList = {
   signup: undefined
   main: undefined
   profile: undefined
+  location: undefined
 }
 
 // Documentation: https://github.com/software-mansion/react-native-screens/tree/master/native-stack
 const Stack = createNativeStackNavigator<PrimaryParamList>()
 
 export function PrimaryNavigator() {
+  const rootStore = useStores()
+
   return (
     <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-        gestureEnabled: true,
-      }}
+      screenOptions={{ gestureEnabled: true, headerShown: false }}
+      initialRouteName={rootStore.user ? "main" : "signin"}
     >
       <Stack.Screen name="signin" component={SignInScreen} />
       <Stack.Screen name="signup" component={SignUpScreen} />
+      <Stack.Screen name="main" component={MainScreen} />
+      <Stack.Screen name="profile" component={ProfileScreen} />
+      <Stack.Screen name="location" component={LocationScreen} />
     </Stack.Navigator>
   )
 }
