@@ -8,7 +8,7 @@ import { mergeAll, flatten } from "ramda"
 
 // the base styling for the container
 const CONTAINER: ViewStyle = {
-  paddingVertical: spacing[3],
+  marginBottom: spacing[4]
 }
 
 // the base styling for the TextInput
@@ -17,7 +17,11 @@ const INPUT: TextStyle = {
   color: color.text,
   minHeight: 44,
   fontSize: 18,
-  backgroundColor: color.palette.white,
+  backgroundColor: color.background
+}
+
+const LABEL: TextStyle = {
+  color: color.primaryDarker
 }
 
 // currently we have no presets, but that changes quickly when you build your app.
@@ -53,7 +57,7 @@ export const TextField: Component<TextFieldProps> = props => {
 
   return (
     <View style={containerStyle}>
-      <Text preset="fieldLabel" tx={labelTx} text={label} />
+      <Text preset="fieldLabel" tx={labelTx} text={label} style={LABEL} />
       <TextInput
         placeholder={actualPlaceholder}
         placeholderTextColor={color.palette.lighterGrey}
