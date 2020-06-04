@@ -221,7 +221,7 @@ export class Api {
     try {
       const resultUser: Types.User = {
         id: response.data.id,
-        username: response.data.name,
+        username: response.data.username,
         email: response.data.email,
       }
       return { kind: "ok", user: resultUser }

@@ -1,9 +1,10 @@
-import React, { FunctionComponent as Component } from "react"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
+import React, { FunctionComponent as Component, useState } from "react"
+import { View, Image, ViewStyle, TextStyle, ImageStyle, ActivityIndicator } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import { Button, Header, Screen, Text, Wallpaper, TextField } from "../../components"
 import { color, spacing } from "../../theme"
+import { useStores } from "../../models"
 const bowserLogo = require("./bowser.png")
 
 const FULL: ViewStyle = { flex: 1 }
@@ -67,7 +68,16 @@ const CONTINUE_TEXT: TextStyle = {
 
 export const SignInScreen: Component = observer(function SignInScreen() {
   const navigation = useNavigation()
-  const nextScreen = () => navigation.navigate("signup")
+
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+
+  const rootStore = useStores()
+
+  const signIn = async () => {
+    await rootStore.signIn(email, password)
+    navigation.navigate("main")
+  }
 
   return (
     <View style={FULL}>
@@ -78,18 +88,27 @@ export const SignInScreen: Component = observer(function SignInScreen() {
           <Text style={TITLE} text="Locais do Mundo" />
         </Text>
         <Image source={bowserLogo} style={BOWSER} />
-        <TextField inputStyle={TEXT_FIELD} label="Digite seu e-mail" />
+        <TextField
+          inputStyle={TEXT_FIELD}
+          label="Digite seu e-mail"
+          value={email}
+          onChangeText={setEmail}
+        />
         <TextField
           inputStyle={TEXT_FIELD}
           label="Digite sua senha"
           secureTextEntry
+          value={password}
+          onChangeText={setPassword}
         />
         <Button
           style={CONTINUE}
-          textStyle={CONTINUE_TEXT}
-          tx="welcomeScreen.continue"
-          onPress={nextScreen}
-        />
+          onPress={signIn}
+        >
+          {rootStore.loading
+            ? <ActivityIndicator />
+            : <Text style={CONTINUE_TEXT} tx="welcomeScreen.continue" />}
+        </Button>
       </Screen>
     </View>
   )
