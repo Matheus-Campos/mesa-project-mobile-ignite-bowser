@@ -1,4 +1,4 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 import { RatingModel } from "../rating/rating"
 import { UserModel } from "../user/user"
 
@@ -8,13 +8,13 @@ import { UserModel } from "../user/user"
 export const LocationModel = types
   .model("Location")
   .props({
-    id: types.identifier,
+    id: types.identifierNumber,
     lat: types.number,
     lng: types.number,
     name: types.string,
     street: types.string,
     streetNumber: types.string,
-    complement: types.optional(types.string, ''),
+    complement: types.maybe(types.string),
     district: types.string,
     city: types.string,
     state: types.string,
@@ -23,10 +23,26 @@ export const LocationModel = types
     createdAt: types.Date,
     updatedAt: types.Date,
     user: UserModel,
-    ratings: types.optional(types.array(RatingModel), [])
+    ratings: types.maybe(types.array(RatingModel))
   })
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views(self => ({
+    get avgRating() {
+      if (!self.ratings.length) return 0
+      const ratingsSum = self.ratings.map(r => r.rating).reduce((prev, acc) => prev + acc, 0)
+      return ratingsSum / self.ratings.length
+    }
+  }))
+  .actions(self => ({
+    rate: flow(function * rate(userId: number, rating: number, comment: string) {
+      try {
+        yield new Promise(resolve => setTimeout(resolve, 2000))
+        const newRating = RatingModel.create({ id: Math.random(), rating, comment })
+        self.ratings.push(newRating)
+      } catch (err) {
+        console.tron.log('error')
+      }
+    })
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
   /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).

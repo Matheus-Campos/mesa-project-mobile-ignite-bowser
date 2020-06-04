@@ -6,9 +6,9 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 export const RatingModel = types
   .model("Rating")
   .props({
-    id: types.identifier,
+    id: types.identifierNumber,
     rating: types.number,
-    comment: types.optional(types.string, ''),
+    comment: types.maybeNull(types.string),
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

@@ -6,7 +6,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 export const UserModel = types
   .model("User")
   .props({
-    id: types.identifier,
+    id: types.identifierNumber,
     username: types.string,
     email: types.string,
   })
