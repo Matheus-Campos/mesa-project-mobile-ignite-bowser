@@ -1,9 +1,14 @@
 import { GeneralApiProblem } from "./api-problem"
+import { Location, User } from "../../models"
 
-export interface User {
-  id: number
-  name: string
+export {
+  User,
+  Location
 }
 
-export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem
+export type GetToken = { kind: "ok"; token: string } | GeneralApiProblem
+
 export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
+
+export type GetLocationResult = { kind: "ok"; location: Location } | GeneralApiProblem
+export type GetLocationsResult = { kind: "ok"; locations: Location[] } | GeneralApiProblem
