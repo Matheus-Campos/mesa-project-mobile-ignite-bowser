@@ -77,7 +77,7 @@ const HINT: TextStyle = {
   marginVertical: spacing[2],
 }
 
-export const DemoScreen: Component = observer(function DemoScreen() {
+export const SignUpScreen: Component = observer(function SignUpScreen() {
   const navigation = useNavigation()
   const goBack = () => () => navigation.goBack()
 
